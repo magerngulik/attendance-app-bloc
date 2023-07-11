@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class QDontHaveAccont extends StatelessWidget {
-  Function ontap;
-  String? title;
-  String? subtitile;
-  QDontHaveAccont({
+  final Function ontap;
+  final String? title;
+  final String? subtitile;
+  const QDontHaveAccont({
     Key? key,
     required this.ontap,
     this.title,
@@ -19,7 +19,7 @@ class QDontHaveAccont extends StatelessWidget {
       children: [
         Text(
           title ?? "Don't have an account?",
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 15.0,
           ),
         ),

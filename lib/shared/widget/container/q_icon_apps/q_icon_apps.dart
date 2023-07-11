@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class QIconApps extends StatelessWidget {
-  double? height;
-  double? width;
-  QIconApps({
+  final double? height;
+  final double? width;
+  const QIconApps({
     Key? key,
     this.height,
     this.width,

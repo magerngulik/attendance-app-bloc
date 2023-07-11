@@ -29,7 +29,6 @@ class _QTextfieldLoginState extends State<QTextfieldLogin> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.obscureText != null) {
       visibility = widget.obscureText;
@@ -60,7 +59,7 @@ class _QTextfieldLoginState extends State<QTextfieldLogin> {
             obscureText: visibility ?? false,
             decoration: InputDecoration(
               hintText: widget.hintText,
-              labelStyle: TextStyle(
+              labelStyle: const TextStyle(
                 color: Colors.blueGrey,
               ),
               suffixIcon: (widget.obscureText != null)
@@ -85,7 +84,7 @@ class _QTextfieldLoginState extends State<QTextfieldLogin> {
                         color: Colors.green,
                         size: 24.0,
                       ),
-              enabledBorder: UnderlineInputBorder(
+              enabledBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: Colors.blueGrey,
                 ),

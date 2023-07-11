@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import '../q_box_container/q_box_container.dart';
 
 class Qor extends StatelessWidget {
-  bool? sideContainer;
+  final bool? sideContainer;
 
-  Qor({
+  const Qor({
     Key? key,
     this.sideContainer,
   }) : super(key: key);
@@ -29,7 +29,7 @@ class Qor extends StatelessWidget {
         const SizedBox(
           width: 30.0,
         ),
-        Text(
+        const Text(
           "Or",
           style: TextStyle(
             fontSize: 15.0,

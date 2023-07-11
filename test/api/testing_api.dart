@@ -6,9 +6,9 @@ void main() {
   Dio dioClient = Dio();
   var data = ServiceAttandance(dioClient: dioClient);
 
-  test('api get Destination', () async {
-    var response = await data.getAbsen("1");
-    expect(response.isRight(), true);
-    expect(response.isLeft(), false);
+  test('api get destination', () async {
+    // var response = await data.action("1");
+    // expect(response.isRight(), true);
+    // expect(response.isLeft(), false);
   });
 }

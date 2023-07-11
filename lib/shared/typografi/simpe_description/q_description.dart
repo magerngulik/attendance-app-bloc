@@ -9,13 +9,11 @@ class QDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text(
-        description,
-        textAlign: TextAlign.justify,
-        style: const TextStyle(
-          fontSize: 18.0,
-        ),
+    return Text(
+      description,
+      textAlign: TextAlign.justify,
+      style: const TextStyle(
+        fontSize: 18.0,
       ),
     );
   }

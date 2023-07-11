@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 
 class QButton extends StatelessWidget {
-  String title;
-  Function ontap;
-  Color? color;
-  Color? backgroundColor;
-  double? fontSize;
+  final String title;
+  final Function ontap;
+  final Color? color;
+  final Color? backgroundColor;
+  final double? fontSize;
 
-  QButton({
+  const QButton({
     Key? key,
     required this.title,
     required this.ontap,

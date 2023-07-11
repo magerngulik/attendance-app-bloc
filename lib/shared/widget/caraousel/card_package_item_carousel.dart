@@ -102,10 +102,10 @@ class CardPackageItemCarousel extends StatelessWidget {
                     Align(
                       alignment: Alignment.topRight,
                       child: Padding(
-                        padding: EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Text(
                           price,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 20.0,
                             color: Colors.white,
                           ),

@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 
-class QLoading extends StatelessWidget {
-  const QLoading({
+class Qloading extends StatelessWidget {
+  const Qloading({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: const Center(
+    return const SizedBox(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

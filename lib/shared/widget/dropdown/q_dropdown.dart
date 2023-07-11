@@ -56,9 +56,9 @@ class _QDropdownFieldState extends State<QDropdownField> {
     }
   }
 
-  setAllItemsToFalse() {
-    for (var item in items) {}
-  }
+  // setAllItemsToFalse() {
+  //   for (var item in items) {}
+  // }
 
   Map<String, dynamic>? get currentValue {
     if (widget.emptyMode) {

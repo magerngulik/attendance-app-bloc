@@ -5,9 +5,9 @@ class CardDestination extends StatelessWidget {
   final String title;
   final String subtitle;
   final String location;
-  EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry? margin;
 
-  CardDestination(
+  const CardDestination(
       {Key? key,
       required this.image,
       required this.title,
@@ -54,7 +54,7 @@ class CardDestination extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -80,7 +80,7 @@ class CardDestination extends StatelessWidget {
                 Text(
                   description,
                   textAlign: TextAlign.justify,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 15.0,
                   ),
                 ),
