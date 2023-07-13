@@ -14,16 +14,18 @@ dependencies:
   cached_network_image: ^3.2.3
   carousel_slider: ^4.2.1
   cupertino_icons: ^1.0.2
+  dartz: ^0.10.1
   dio: ^5.2.1+1
   eloquent: ^2.0.2
+  equatable: ^2.0.5
   flutter:
     sdk: flutter
   flutter_animate: ^4.2.0
   flutter_bloc: ^8.1.3
+  geolocator: ^9.0.2
   google_fonts: ^5.1.0
   intl: ^0.18.1
   logger: ^1.4.0
-  dartz: ^0.10.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -32,3 +34,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/icon/
+    - assets/img/

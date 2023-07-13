@@ -1,10 +1,12 @@
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter/material.dart';
 
-Future showInfoDialog(String message, {required BuildContext context}) async {
+Future showInfoDialog(
+    {required BuildContext buildContext,
+    required String message,
+    required String title}) async {
   await showDialog<void>(
-    context: context,
-    barrierDismissible: true,
+    context: buildContext,
     builder: (context) {
       return Container(
         color: Colors.black.withOpacity(0.4),
@@ -24,9 +26,9 @@ Future showInfoDialog(String message, {required BuildContext context}) async {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Kesalahan",
-                          style: TextStyle(
+                        Text(
+                          title,
+                          style: const TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.bold,
                           ),

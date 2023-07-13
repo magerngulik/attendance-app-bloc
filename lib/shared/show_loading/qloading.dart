@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
 class Qloading extends StatelessWidget {
+  final double height;
+  final double width;
   const Qloading({
     super.key,
+    required this.height,
+    required this.width,
   });
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
-      child: Center(
+    return SizedBox(
+      height: height,
+      width: width,
+      child: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

@@ -7,8 +7,6 @@ class AttendanceInitial extends AttendanceState {}
 
 class AttendanceLoading extends AttendanceState {}
 
-class AttendanceCheking extends AttendanceState {}
-
 class AttendanceLoaded extends AttendanceState {
   final Map<String, dynamic> data;
   AttendanceLoaded({
@@ -22,3 +20,12 @@ class AttendanceError extends AttendanceState {
     required this.error,
   });
 }
+
+class AttendanceCompleate extends AttendanceState {
+  final String message;
+  AttendanceCompleate({
+    required this.message,
+  });
+}
+
+class AttendanceCheking extends AttendanceState {}

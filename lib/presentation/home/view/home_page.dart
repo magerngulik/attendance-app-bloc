@@ -1,31 +1,55 @@
 import 'dart:async';
-
 import 'package:attendance_app/logic/attendance/attendance_bloc.dart';
+import 'package:attendance_app/shared/dialog/q_confirmation_dialog.dart';
 import 'package:attendance_app/shared/dialog/show_info_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 
+import '../../../logic/login/login_bloc.dart';
+import '../../login/view/login_view.dart';
 import '../widget/q_clock_home_page.dart';
 
 class HomePageView extends StatefulWidget {
-  const HomePageView({Key? key}) : super(key: key);
+  final Map<String, dynamic> data;
+  const HomePageView({Key? key, required this.data}) : super(key: key);
 
   @override
   State<HomePageView> createState() => _HomePageViewState();
 }
 
 class _HomePageViewState extends State<HomePageView> {
-  final DateTime _dateTime = DateTime.now();
   DateTime tanggal = DateTime.now();
   Stream<DateTime>? _dateTimeStream;
   StreamController<DateTime>? _dateTimeController;
+
+  String idUser = "";
+  String token = "";
+  Map<String, dynamic> dataUser = {};
+  var logger = Logger();
+
+  _getDataByParameter() {
+    token = widget.data['token'];
+    dataUser = widget.data['user'];
+    idUser = widget.data['user']['id'].toString();
+  }
 
   @override
   void initState() {
     super.initState();
     _dateTimeController = StreamController<DateTime>();
+    _getDataByParameter();
+    _cekDataAwal();
     _startTimer();
+  }
+
+  _cekDataAwal() {
+    logger.wtf("User id awal: $idUser");
+    logger.wtf(widget.data);
+    context
+        .read<AttendanceBloc>()
+        .add(LoadedAttendaceEvent(id: widget.data['user']['id'].toString()));
   }
 
   void _startTimer() {
@@ -33,38 +57,88 @@ class _HomePageViewState extends State<HomePageView> {
       const Duration(seconds: 1),
       (_) => DateTime.now(),
     );
-
     _dateTimeController!.addStream(_dateTimeStream!);
+  }
+
+  _setKosong() {
+    idUser = "";
+    token = "";
+    dataUser = {};
   }
 
   @override
   void dispose() {
     _dateTimeController!.close();
+    _setKosong();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(">>>>>REBUILT");
     var attandance = context.read<AttendanceBloc>();
-    return BlocListener<AttendanceBloc, AttendanceState>(
-      bloc: attandance,
-      listener: (context, state) async {
-        if (state is AttendanceError) {
-          await showInfoDialog(state.error, context: context);
-          attandance.add(LoadedAttendaceEvent(
-            id: "1",
-          ));
-        }
-      },
+    var login = context.read<LoginBloc>();
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AttendanceBloc, AttendanceState>(
+          bloc: attandance,
+          listener: (context, state) async {
+            if (state is AttendanceError) {
+              showInfoDialog(
+                  buildContext: context,
+                  message: state.error,
+                  title: "Kesalahan");
+              attandance.add(LoadedAttendaceEvent(
+                id: idUser,
+              ));
+            } else if (state is AttendanceCompleate) {
+              showInfoDialog(
+                  buildContext: context, message: state.message, title: "Info");
+              attandance.add(LoadedAttendaceEvent(
+                id: idUser,
+              ));
+            }
+          },
+        ),
+        BlocListener<LoginBloc, LoginState>(
+          bloc: login,
+          listener: (context, state) async {
+            if (state is LoginInitial) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginView()),
+              );
+            }
+          },
+        ),
+      ],
       child: Scaffold(
+        appBar: AppBar(
+          leading: Container(),
+          actions: [
+            IconButton(
+              onPressed: () {
+                qshowConfirmationDialog(
+                    context: context,
+                    ontap: () {
+                      login.add(Logout(token: token));
+                    },
+                    title: "Peringatan",
+                    message: "Apakah anda yakin ingin keluar?");
+              },
+              icon: const Icon(
+                Icons.logout,
+                size: 24.0,
+              ),
+            ),
+          ],
+        ),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
                 const SizedBox(
-                  height: 100.0,
+                  height: 50.0,
                 ),
                 Center(
                   child: Column(
@@ -74,11 +148,13 @@ class _HomePageViewState extends State<HomePageView> {
                         stream: _dateTimeController!.stream,
                         initialData: DateTime.now(),
                         builder: (context, snapshot) {
-                          debugPrint(">>>>>REDATA");
                           if (snapshot.hasData) {
                             return Text(
                               "${snapshot.data!.hour}: ${snapshot.data!.minute}",
-                              style: const TextStyle(fontSize: 30),
+                              style: const TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
                             );
                           } else {
                             return const Text(
@@ -97,21 +173,44 @@ class _HomePageViewState extends State<HomePageView> {
                       const SizedBox(
                         height: 50.0,
                       ),
-                      const CircleAvatar(
-                        maxRadius: 100,
-                        backgroundImage: NetworkImage(
-                          "https://i.ibb.co/PGv8ZzG/me.jpg",
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      const Text(
-                        "Zulkarnaen",
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      BlocBuilder<LoginBloc, LoginState>(
+                        bloc: login,
+                        builder: (context, state) {
+                          if (state is LoginLoaded) {
+                            Map<String, dynamic> item = state.dataUser;
+                            var dataUser = item['user'];
+
+                            return Column(
+                              children: [
+                                CircleAvatar(
+                                  maxRadius: 100,
+                                  backgroundImage: NetworkImage(
+                                    dataUser['avatar'],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                Text(
+                                  "${dataUser['name']}",
+                                  style: const TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  "${dataUser['email']}",
+                                  style: const TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
                       ),
                       const SizedBox(
                         height: 80.0,
@@ -128,7 +227,7 @@ class _HomePageViewState extends State<HomePageView> {
                         label: const Text("Check in"),
                         onPressed: () {
                           attandance.add(AbsenMasukEvent(
-                              id: "1", locationMasuk: 'Kantor Utama'));
+                              id: idUser, locationMasuk: 'Kantor Utama'));
                         },
                       ),
                       const SizedBox(
@@ -136,10 +235,10 @@ class _HomePageViewState extends State<HomePageView> {
                       ),
                       ElevatedButton.icon(
                         icon: const Icon(Icons.logout),
-                        label: const Text("Logout"),
-                        onPressed: () {
+                        label: const Text("Check Out"),
+                        onPressed: () async {
                           attandance.add(AbsenKeluarEvent(
-                              id: "1", locationKeluar: 'Kantor Utama'));
+                              id: idUser, locationKeluar: 'Kantor Utama'));
                         },
                       ),
                     ],
@@ -153,7 +252,6 @@ class _HomePageViewState extends State<HomePageView> {
                   builder: (context, state) {
                     if (state is AttendanceLoaded) {
                       var item = state.data['data'];
-
                       String? absenMasuk = item['waktu_masuk'] ?? '-';
                       String? absenKeluar = item['waktu_keluar'] ?? '-';
                       String? waktuKerja = item['waktu_kerja'] ?? '-';

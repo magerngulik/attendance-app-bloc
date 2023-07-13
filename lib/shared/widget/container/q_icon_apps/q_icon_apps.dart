@@ -17,7 +17,7 @@ class QIconApps extends StatelessWidget {
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage(
-            "assets/icon/travel-and-tourism.png",
+            "assets/icon/log-in.png",
           ),
           fit: BoxFit.cover,
         ),
