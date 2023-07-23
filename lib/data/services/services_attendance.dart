@@ -1,14 +1,18 @@
+import 'package:attendance_app/data/services/qurl.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
 
 class ServiceAttandance {
   final Dio dioClient;
   ServiceAttandance({required this.dioClient});
+  var log = Logger();
 
-  // final String _baseUrl = "http://192.168.1.6:8000";
-  final String _baseUrl = "http://attendance-app.test";
+  final String _baseUrl = BaseUrlAttendance().baseUrlAttandace;
+
   Future<Either<Map<String, dynamic>, Map<String, dynamic>>> absenMasuk(
       {required String id, required String lokasiMasuk}) async {
+    log.w("lokasi masuk = $lokasiMasuk, url = $_baseUrl");
     try {
       var response = await dioClient.post(
         "$_baseUrl/api/attendance/absenMasuk",
@@ -42,7 +46,8 @@ class ServiceAttandance {
         }
 
         Map<String, dynamic> message = {
-          "message": "Server sedang maintance harap login beberapa saat lagi",
+          "message":
+              "Server sedang maintance harap login beberapa saat lagi LOGIN ${e.response!.statusCode}",
           "status code": e.response!.statusCode
         };
         return Left(message);
@@ -88,7 +93,8 @@ class ServiceAttandance {
         }
 
         Map<String, dynamic> message = {
-          "message": "Server sedang maintance harap login beberapa saat lagi",
+          "message":
+              "Server sedang maintance harap coba beberapa saat lagi LG ${e.response!.statusCode}",
           "status code": e.response!.statusCode
         };
         return Left(message);

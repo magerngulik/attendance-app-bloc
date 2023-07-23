@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'package:attendance_app/logic/attendance/attendance_bloc.dart';
-import 'package:attendance_app/shared/dialog/q_confirmation_dialog.dart';
 import 'package:attendance_app/shared/dialog/show_info_dialog.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
+import '../../../data/services/permission_location.dart';
 import '../../../logic/login/login_bloc.dart';
+import '../../../shared/dialog/q_confirmation_dialog.dart';
 import '../../login/view/login_view.dart';
 import '../widget/q_clock_home_page.dart';
 
@@ -23,6 +25,8 @@ class _HomePageViewState extends State<HomePageView> {
   DateTime tanggal = DateTime.now();
   Stream<DateTime>? _dateTimeStream;
   StreamController<DateTime>? _dateTimeController;
+  var log = Logger();
+  var location = LocationServices(dioClient: Dio());
 
   String idUser = "";
   String token = "";
@@ -225,9 +229,10 @@ class _HomePageViewState extends State<HomePageView> {
                       ElevatedButton.icon(
                         icon: const Icon(Icons.login),
                         label: const Text("Check in"),
-                        onPressed: () {
-                          attandance.add(AbsenMasukEvent(
-                              id: idUser, locationMasuk: 'Kantor Utama'));
+                        onPressed: () async {
+                          await location.getPermision();
+
+                          attandance.add(AbsenMasukEvent(id: idUser));
                         },
                       ),
                       const SizedBox(
@@ -237,8 +242,8 @@ class _HomePageViewState extends State<HomePageView> {
                         icon: const Icon(Icons.logout),
                         label: const Text("Check Out"),
                         onPressed: () async {
-                          attandance.add(AbsenKeluarEvent(
-                              id: idUser, locationKeluar: 'Kantor Utama'));
+                          await location.getPermision();
+                          attandance.add(AbsenKeluarEvent(id: idUser));
                         },
                       ),
                     ],

@@ -1,3 +1,4 @@
+import 'package:attendance_app/data/services/permission_location.dart';
 import 'package:bloc/bloc.dart';
 
 import 'package:attendance_app/data/services/services_attendance.dart';
@@ -8,14 +9,26 @@ part 'attendance_state.dart';
 
 class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   final ServiceAttandance services;
-  AttendanceBloc({
-    required this.services,
-  }) : super(AttendanceInitial()) {
+  final LocationServices location;
+
+  AttendanceBloc({required this.services, required this.location})
+      : super(AttendanceInitial()) {
     var loger = Logger();
+
     on<AbsenMasukEvent>((event, emit) async {
       emit(AttendanceLoading());
-      var result = await services.absenMasuk(
-          id: event.id, lokasiMasuk: event.locationMasuk);
+      String lokasiMasuk = "";
+      var lokasi = await location.getWeather();
+
+      lokasi.fold((l) {
+        emit(AttendanceError(error: l));
+      }, (r) {
+        lokasiMasuk =
+            "${r.location.name}, ${r.location.region}, ${r.location.country}";
+      });
+
+      var result =
+          await services.absenMasuk(id: event.id, lokasiMasuk: lokasiMasuk);
       Map<String, dynamic> data = {};
       result.fold((l) {
         data = l;
@@ -31,10 +44,19 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     });
 
     on<AbsenKeluarEvent>((event, emit) async {
-      // var loger = Logger();
       emit(AttendanceLoading());
-      var result = await services.absenKeluar(
-          id: event.id, lokasiKeluar: event.locationKeluar);
+      String lokasiKeluar = "";
+      var lokasi = await location.getWeather();
+
+      lokasi.fold((l) {
+        emit(AttendanceError(error: l));
+      }, (r) {
+        lokasiKeluar =
+            "${r.location.name}, ${r.location.region}, ${r.location.country}";
+      });
+
+      var result =
+          await services.absenKeluar(id: event.id, lokasiKeluar: lokasiKeluar);
       Map<String, dynamic> data = {};
       result.fold((l) {
         data = l;

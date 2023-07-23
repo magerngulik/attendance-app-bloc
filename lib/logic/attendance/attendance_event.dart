@@ -5,19 +5,17 @@ class AttendanceEvent {}
 
 class AbsenMasukEvent extends AttendanceEvent {
   final String id;
-  final String locationMasuk;
   AbsenMasukEvent({
     required this.id,
-    required this.locationMasuk,
   });
 }
 
 class AbsenKeluarEvent extends AttendanceEvent {
   final String id;
-  final String locationKeluar;
+ 
   AbsenKeluarEvent({
     required this.id,
-    required this.locationKeluar,
+
   });
 }
 

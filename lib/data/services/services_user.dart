@@ -1,17 +1,18 @@
+import 'package:attendance_app/data/services/qurl.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
 
 class ServicesUser {
   final Dio dioClient;
   ServicesUser({
     required this.dioClient,
   });
-
-  final String _baseUrl = "http://attendance-app.test";
-//  final String _baseUrl = "http://192.168.1.6:8000";
-
+  var log = Logger();
+  final String _baseUrl = BaseUrlAttendance().baseUrlAttandace;
   Future<Either<String, Map>> login(
       {required String email, required String password}) async {
+    log.w(" url = $_baseUrl");
     try {
       var response = await dioClient.post(
         "$_baseUrl/api/auth/login",
@@ -37,8 +38,8 @@ class ServicesUser {
               "Unauthorized. Please check your credentials.";
           return Left(errorMessage);
         }
-        return const Left(
-            "Server sedang maintance harap login beberapa saat lagi");
+        return Left(
+            "Server sedang maintance harap login beberapa saat lagi ${e.response!.statusCode}");
       } else {
         return Left(e.toString());
       }

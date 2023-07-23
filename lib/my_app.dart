@@ -1,3 +1,4 @@
+import 'package:attendance_app/data/services/permission_location.dart';
 import 'package:attendance_app/data/services/services_attendance.dart';
 import 'package:attendance_app/data/services/services_user.dart';
 import 'package:attendance_app/logic/attendance/attendance_bloc.dart';
@@ -15,11 +16,13 @@ class MyApp extends StatelessWidget {
     Dio dio = Dio();
     ServiceAttandance serviceAttandance = ServiceAttandance(dioClient: dio);
     ServicesUser servicesUser = ServicesUser(dioClient: dio);
+    LocationServices servicesLoasi = LocationServices(dioClient: dio);
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => AttendanceBloc(services: serviceAttandance),
+          create: (context) => AttendanceBloc(
+              services: serviceAttandance, location: servicesLoasi),
         ),
         BlocProvider(
           create: (context) => LoginBloc(services: servicesUser),
