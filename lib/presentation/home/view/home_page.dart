@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:attendance_app/logic/attendance/attendance_bloc.dart';
 import 'package:attendance_app/shared/dialog/show_info_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,6 +38,12 @@ class _HomePageViewState extends State<HomePageView> {
     token = widget.data['token'];
     dataUser = widget.data['user'];
     idUser = widget.data['user']['id'].toString();
+  }
+
+  String replaceBackslashWithSlash(String inputString) {
+    // Menggunakan metode replaceAll untuk mengganti backslash (\) dengan slash (/)
+    String outputString = inputString.replaceAll('\\', '/');
+    return outputString;
   }
 
   @override
@@ -183,14 +190,23 @@ class _HomePageViewState extends State<HomePageView> {
                           if (state is LoginLoaded) {
                             Map<String, dynamic> item = state.dataUser;
                             var dataUser = item['user'];
+                            var avatar =
+                                replaceBackslashWithSlash(dataUser['avatar']);
 
                             return Column(
                               children: [
-                                CircleAvatar(
-                                  maxRadius: 100,
-                                  backgroundImage: NetworkImage(
-                                    dataUser['avatar'],
-                                  ),
+                                CachedNetworkImage(
+                                  imageUrl: avatar,
+                                  imageBuilder: (context, imageProvider) =>
+                                      CircleAvatar(
+                                          maxRadius: 100,
+                                          backgroundImage: imageProvider),
+                                  placeholder: (context, url) =>
+                                      const CircleAvatar(
+                                          maxRadius: 100,
+                                          child: CircularProgressIndicator()),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
                                 ),
                                 const SizedBox(
                                   height: 10.0,

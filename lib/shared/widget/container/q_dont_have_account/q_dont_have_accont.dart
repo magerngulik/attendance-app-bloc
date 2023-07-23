@@ -27,7 +27,7 @@ class QDontHaveAccont extends StatelessWidget {
           width: 4.0,
         ),
         InkWell(
-          onTap: () => ontap,
+          onTap: () => ontap(),
           child: Text(
             subtitile ?? "Sign Up",
             style: TextStyle(

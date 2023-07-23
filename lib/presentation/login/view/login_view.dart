@@ -132,8 +132,61 @@ class _LoginViewState extends State<LoginView> {
                           height: 30.0,
                         ),
                         QButton(
-                          title: "Login with Google",
-                          ontap: () {},
+                          title: "Check akun",
+                          ontap: () async {
+                            await showModalBottomSheet<void>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Container(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Wrap(
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            const Text('Informasi Akun'),
+                                            const SizedBox(
+                                              height: 20.0,
+                                            ),
+                                            const Column(
+                                              children: [
+                                                Text(
+                                                  "admin@admin.com",
+                                                  style: TextStyle(
+                                                    fontSize: 18.0,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "password",
+                                                  style: TextStyle(
+                                                    fontSize: 18.0,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              height: 20.0,
+                                            ),
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text("Ok"),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
                           backgroundColor: Colors.black,
                           color: Colors.white,
                           fontSize: 14.0,
@@ -141,10 +194,15 @@ class _LoginViewState extends State<LoginView> {
                         const SizedBox(
                           height: 50.0,
                         ),
-                        QDontHaveAccont(ontap: () {})
+                        QDontHaveAccont(ontap: () async {
+                          const snackBar = SnackBar(
+                            content: Text('Fiture ini belum tersedia'),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        })
                       ],
                     ),
-                  );
+                  );  
                 },
               )),
         ),
